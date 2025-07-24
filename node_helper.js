@@ -62,13 +62,15 @@ module.exports = NodeHelper.create({
       // get cpu temp
       async.apply(exec, temp_conv + ' /sys/class/thermal/thermal_zone0/temp'),
       // get system load
-      async.apply(exec, 'top -bn2 | grep "CPU(s)" | tail -n1 | awk \'{printf "%.1f", (100 - $8)}\'cat /proc/loadavg'),
+//      async.apply(exec, 'top -bn2 | grep "CPU(s)" | tail -n1 | awk \'{printf "%.1f", (100 - $8)}\'cat /proc/loadavg'),
+      async.apply(exec, 'top -bn2 | grep "Cpu(s)" | tail -n1 | sed -n \'s/.*, *\\([0-9.]*\\)%* id.*/\\1/p\' | awk \'{printf 100 - $1}\''),
       // get free ram in %
-      async.apply(exec, 'free | awk \'/^' + this.config.memTrans + ':/ {printf "%.0f\\n", ($7*100/$2)}\''),
+      async.apply(exec, 'free | awk \'/^' + this.config.memTrans + ':/ {printf "%.0f", ($7*100/$2)}\''),
       // get uptime
       async.apply(exec, 'cat /proc/uptime'),
       // get root free-space
-      async.apply(exec, "df -h|grep /dev/root|awk '{print $4}'"),
+      // async.apply(exec, "df -h|grep /dev/root|awk '{print $4}'"),
+      async.apply(exec, "df -h | awk '$NF == \"/\" {printf $4}'")
 
     ],
     function (err, res) {
