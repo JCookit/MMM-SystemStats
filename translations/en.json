@@ -1,9 +1,9 @@
 {
-	"CPU_TEMP": "CPU Temp",
-	"SYS_LOAD": "System Load",
-	"RAM_FREE": "Free RAM",
-	"UPTIME": "Uptime",
-	"DISK_FREE": "Avail Space",
+	"CPU_TEMP": "Temp",
+	"SYS_LOAD": "CPU",
+	"RAM_FREE": "RAM",
+	"UPTIME": "Up",
+	"DISK_FREE": "SSD",
 	"TEMP_THRESHOLD_WARNING": "CPU Temp has exceeded threshold",
 	"LOADING": "Loading ...",
 	"MEM_NAME": "Mem"

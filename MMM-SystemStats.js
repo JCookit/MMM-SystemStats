@@ -80,7 +80,49 @@ Module.register('MMM-SystemStats', {
     }
   },
 
+getDom: function () {
+  var self = this;
+  var wrapper = document.createElement('div');
+  wrapper.className = 'system-stats-inline';
+
+  var sysData = {
+    cpuTemp: { text: 'CPU_TEMP', icon: 'fa-thermometer-half' },
+    sysLoad: { text: 'SYS_LOAD', icon: 'fa-tachometer-alt' },
+    freeMem: { text: 'RAM_FREE', icon: 'fa-microchip' },
+    upTime: { text: 'UPTIME', icon: 'fa-clock' },
+    freeSpace: { text: 'DISK_FREE', icon: 'fa-hdd' },
+  };
+
+  Object.keys(sysData).forEach(function (item) {
+    var statBlock = document.createElement('div');
+    statBlock.className = 'stat-block';
+
+    if (self.config.label.match(/^(text|textAndIcon)$/)) {
+      var label = document.createElement('span');
+      label.className = 'stat-label';
+      label.innerText = self.translate(sysData[item].text);
+      statBlock.appendChild(label);
+    }
+
+    if (self.config.label.match(/^(icon|textAndIcon)$/)) {
+      var icon = document.createElement('span');
+      icon.innerHTML = `<i class="fas ${sysData[item].icon} fa-fw"></i>`;
+      statBlock.appendChild(icon);
+    }
+
+    var value = document.createElement('span');
+    value.className = 'stat-value';
+    value.innerText = self.stats[item];
+    statBlock.appendChild(value);
+
+    wrapper.appendChild(statBlock);
+  });
+
+  return wrapper;
+}
+
   // Override dom generator.
+/*
   getDom: function() {
     var self = this;
     var wrapper = document.createElement('table');
@@ -136,4 +178,6 @@ Module.register('MMM-SystemStats', {
 
     return wrapper;
   },
+*/
+
 });
