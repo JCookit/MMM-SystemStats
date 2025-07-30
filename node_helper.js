@@ -58,6 +58,14 @@ module.exports = NodeHelper.create({
         break;
     }
 
+function safeGet(res, index) {
+  return Array.isArray(res[index]) &&
+         res[index][0] &&
+         res[index][0].trim() !== ''
+    ? res[index][0]
+    : 'N/A';
+}
+
     async.parallel([
       // get cpu temp
       async.apply(exec, temp_conv + ' /sys/class/thermal/thermal_zone0/temp'),
@@ -74,12 +82,20 @@ module.exports = NodeHelper.create({
 
     ],
     function (err, res) {
-      let stats = {};
+      let stats = {
+        cpuTemp: safeGet(res, 0),
+        sysLoad: safeGet(res, 1),
+        freeMem: safeGet(res, 2),
+        upTime: safeGet(res, 3) !== 'N/A' ? safeGet(res, 3).split(' ') : ['N/A'],
+        freeSpace: safeGet(res, 4)
+      };
+/*      let stats = {};
       stats.cpuTemp = res[0][0];
       stats.sysLoad = res[1][0];
       stats.freeMem = res[2][0];
       stats.upTime = res[3][0].split(' ');
       stats.freeSpace = res[4][0];
+      */
       // console.log(stats);
       self.sendSocketNotification('STATS', stats);
     });
